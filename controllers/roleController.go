@@ -26,8 +26,10 @@ func CreateRole(c *fiber.Ctx) error {
 	list := roleDTO["permissions"].([]interface{})
 
 	permissions := make([]models.Permission, len(list))
+
 	for i, permissionId := range list {
 		id, _ := strconv.Atoi(permissionId.(string))
+
 		permissions[i] = models.Permission{
 			Id: uint(id),
 		}
