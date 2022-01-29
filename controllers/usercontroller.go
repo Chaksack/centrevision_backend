@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"math"
 	"strconv"
 
 	"github.com/Chaksack/centrevision_backend/database"
@@ -11,22 +10,7 @@ import (
 
 func AllUsers(c *fiber.Ctx) error {
 	page, _ := strconv.Atoi(c.Query("page", "1"))
-	limit := 10
-	offset := (page - 1) * limit
-	var total int64
-	var users []models.User
-
-	database.Database.Db.Preload("Role").Offset(offset).Limit(limit).Find(&users)
-	database.Database.Db.Model(&models.User{}).Count(&total)
-
-	return c.JSON(fiber.Map{
-		"data": users,
-		"meta": fiber.Map{
-			"total":     total,
-			"page":      page,
-			"last_page": math.Ceil(float64(int(total) / limit)),
-		},
-	})
+	return c.JSON(models.Paginate(database.Database.Db, &models.User{}, page))
 
 }
 

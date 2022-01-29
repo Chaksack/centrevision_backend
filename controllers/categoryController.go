@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"math"
 	"strconv"
 
 	"github.com/Chaksack/centrevision_backend/database"
@@ -11,22 +10,8 @@ import (
 
 func AllCategorys(c *fiber.Ctx) error {
 	page, _ := strconv.Atoi(c.Query("page", "1"))
-	limit := 10
-	offset := (page - 1) * limit
-	var total int64
-	var categorys []models.Category
 
-	database.Database.Db.Offset(offset).Limit(limit).Find(&categorys)
-	database.Database.Db.Model(&models.Category{}).Count(&total)
-
-	return c.JSON(fiber.Map{
-		"data": categorys,
-		"meta": fiber.Map{
-			"total":     total,
-			"page":      page,
-			"last_page": math.Ceil(float64(int(total) / limit)),
-		},
-	})
+	return c.JSON(models.Paginate(database.Database.Db, &models.Category{}, page))
 
 }
 
