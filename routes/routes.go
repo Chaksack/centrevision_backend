@@ -52,4 +52,7 @@ func Setup(app *fiber.App) {
 	app.Post("api/uploads", controllers.Upload)
 	app.Static("/api/uploads", "./uploads")
 
+	app.Get("api/orders", controllers.AllOrders)
+	app.Post("api/export", controllers.Export)
+
 }
