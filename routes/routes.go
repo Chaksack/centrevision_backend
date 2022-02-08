@@ -6,7 +6,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func welcome(c *fiber.Ctx) error {
+	return c.SendString("Welcome to my awesome API")
+}
+
 func Setup(app *fiber.App) {
+	app.Get("/api", welcome)
 	//controllers endpoints
 	app.Post("api/register", controllers.Register)
 	app.Post("api/login", controllers.Login)
